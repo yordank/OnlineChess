@@ -224,6 +224,26 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="chessboardjs-0.3.0\css\chessboard-0.3.0.css" />
+    <Content Include="chessboardjs-0.3.0\css\chessboard-0.3.0.min.css" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\bB.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\bK.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\bN.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\bP.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\bQ.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\bR.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wB.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wK.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wN.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wP.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wQ.png" />
+    <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wR.png" />
+    <Content Include="chessboardjs-0.3.0\js\chessboard-0.3.0.js" />
+    <Content Include="chessboardjs-0.3.0\js\chessboard-0.3.0.min.js" />
+    <Content Include="chessboardjs-0.3.0\js\jquery-1.10.1.min.js" />
+    <Content Include="chessboardjs-0.3.0\js\json3.min.js" />
+    <Content Include="chessboardjs-0.3.0\LICENSE.txt" />
+    <Content Include="chessboardjs-0.3.0\test.html" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />

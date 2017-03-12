@@ -1,6 +1,94 @@
-﻿@{
-    ViewBag.Title = "Chat";
+﻿ 
+
+
+
+<!-- start example HTML --->
+<div id="board" style="width: 400px"></div>
+<input type="button" id="startPositionBtn" value="Start Position" />
+<!-- end example HTML --->
+
+<script src="./../chessboardjs-0.3.0/js/json3.min.js"></script>
+<script src="./../chessboardjs-0.3.0/js/jquery-1.10.1.min.js"></script>
+<script src="./../chessboardjs-0.3.0/js/chessboard-0.3.0.js"></script>
+<script>
+var init = function() {
+
+//--- start example JS ---
+var onChange = function(oldPos, newPos) {
+  console.log("Position changed:");
+  console.log("Old position: " + ChessBoard.objToFen(oldPos));
+  console.log("New position: " + ChessBoard.objToFen(newPos));
+  console.log("--------------------");
+
+  $.connection.hub.start().done(function () {
+      
+          // Call the Send method on the hub.
+          chat.server.send($('#displayname').val(), ChessBoard.objToFen(newPos));
+          // Clear text box and reset focus for next comment.
+          $('#message').val('').focus();
+   
+  });
+
+};
+
+var cfg = {
+  draggable: true,
+  position: 'start',
+  onChange: onChange
+};
+var board = ChessBoard('board', cfg);
+var chat = $.connection.chatHub;
+$('#startPositionBtn').on('click', board.start);
+//--- end example JS ---
+
+
+
+$(function () {
+    // Reference the auto-generated proxy for the hub.
+    
+    // Create a function that the hub can call back to display messages.
+    chat.client.addNewMessageToPage = function (name, message) {
+        // Add the message to the page.
+      //  $('#discussion').append('<li><strong>' + htmlEncode(name)
+        //    + '</strong>: ' + htmlEncode(message) + '</li>');
+        board.position(message);
+    };
+    // Get the user name and store it to prepend to messages.
+
+    // $('#displayname').val(prompt('Enter your name:', ''));
+
+
+
+    $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
+
+
+
+
+    // Set initial focus to message input box.
+    $('#message').focus();
+    // Start the connection.
+    $.connection.hub.start().done(function () {
+        $('#sendmessage').click(function () {
+            // Call the Send method on the hub.
+            chat.server.send($('#displayname').val(), $('#message').val());
+            // Clear text box and reset focus for next comment.
+            $('#message').val('').focus();
+        });
+    });
+});
+    // This optional function html-encodes messages for display in the page.
+function htmlEncode(value) {
+    var encodedValue = $('<div />').text(value).html();
+    return encodedValue;
 }
+
+
+
+}; // end init()
+$(document).ready(init);
+</script>
+
+
 <h2>Chat</h2>
 <div class="container">
     <input type="text" id="message" />
@@ -17,42 +105,6 @@
     <script src="~/signalr/hubs"></script>
     <!--SignalR script to update the chat page and send messages.-->
     <script>
-        $(function () {
-            // Reference the auto-generated proxy for the hub.
-            var chat = $.connection.chatHub;
-            // Create a function that the hub can call back to display messages.
-            chat.client.addNewMessageToPage = function (name, message) {
-                // Add the message to the page.
-                $('#discussion').append('<li><strong>' + htmlEncode(name)
-                    + '</strong>: ' + htmlEncode(message) + '</li>');
-            };
-            // Get the user name and store it to prepend to messages.
-
-           // $('#displayname').val(prompt('Enter your name:', ''));
-
-
-             
-            $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
-            
-         
-
-
-            // Set initial focus to message input box.
-            $('#message').focus();
-            // Start the connection.
-            $.connection.hub.start().done(function () {
-                $('#sendmessage').click(function () {
-        // Call the Send method on the hub.
-        chat.server.send($('#displayname').val(), $('#message').val());
-                    // Clear text box and reset focus for next comment.
-                    $('#message').val('').focus();
-    });
-                });
-        });
-        // This optional function html-encodes messages for display in the page.
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
-        }
+       
     </script>
 }
