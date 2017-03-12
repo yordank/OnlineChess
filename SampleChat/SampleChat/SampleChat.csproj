@@ -238,6 +238,7 @@
     <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wP.png" />
     <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wQ.png" />
     <Content Include="chessboardjs-0.3.0\img\chesspieces\wikipedia\wR.png" />
+    <Content Include="chessboardjs-0.3.0\js\chess.js" />
     <Content Include="chessboardjs-0.3.0\js\chessboard-0.3.0.js" />
     <Content Include="chessboardjs-0.3.0\js\chessboard-0.3.0.min.js" />
     <Content Include="chessboardjs-0.3.0\js\jquery-1.10.1.min.js" />
