@@ -111,8 +111,12 @@ var updateStatus = function () {
     }
 
     statusEl.html(status);
+
     fenEl.html(game.fen());
     pgnEl.html(game.pgn());
+ 
+
+
 };
 
 
@@ -143,7 +147,9 @@ $(function () {
         //    + '</strong>: ' + htmlEncode(message) + '</li>');
         
         board.position(message);
+        
         game.load(message);
+         
         updateStatus();
     };
     // Get the user name and store it to prepend to messages.
@@ -182,13 +188,14 @@ $(document).ready(init);
 </script>
 
 
-<h2>Chat</h2>
-<div class="container">
-    <input type="text" id="message" />
-    <input type="button" id="sendmessage" value="Send" />
-    <input type="hidden" id="displayname" />
-    <ul id="discussion"></ul>
-</div>
+<h2>Chess</h2>
+<!--<div class="container">-->
+ <!--   <input type="text" id="message" /> -->
+ <!--   <input type="button" id="sendmessage" value="Send" /> -->
+<!--    <input type="hidden" id="displayname" />-->
+ <!--   <ul id="discussion"></ul>-->
+<!--   </div> -->
+ 
 @section scripts {
     <!--Script references. -->
     <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->

@@ -15,8 +15,8 @@ namespace SignalRChat
             using (var context = new ChatDbContext())
             {
 
-                context.messages.Add(new Messages(message));
-                context.SaveChanges();
+               context.messages.Add(new Messages(message));
+               context.SaveChanges();
 
             }
 
