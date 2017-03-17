@@ -10,10 +10,19 @@ namespace SampleChat.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Chat");
-           // return View();
+            //return RedirectToAction("Chat");
+            return RedirectToAction("Seek");
+
+            return View();
         }
-        public ActionResult Chat()
+        public ActionResult Chat(string orientation)
+        {
+            ViewBag.orientation = orientation;
+
+            return View();
+        }
+
+        public ActionResult Seek()
         {
             return View();
         }
