@@ -26,12 +26,11 @@ public class ChatHub : Hub
         {
 
             string userId = usersOpponent[name];
-            // Call the addNewMessageToPage method to update clients.
-            //Clients.Client(connectionId).addNewMessageToPage( message);
+           
 
             Clients.User(userId).addNewMessageToPage(message);
       
-            //  Clients.All.addNewMessageToPage(name, message);
+           
             using (var context = new ChatDbContext())
             {
 
@@ -47,8 +46,7 @@ public class ChatHub : Hub
 
         public void Seek(string name)
         {
-            //   var username = Context.User.Identity.Name;
-            //  Console.WriteLine(username);
+            
             var us = new UserConnection();
             us.UserName = name;
             us.userId = Context.User.Identity.Name;
@@ -84,12 +82,24 @@ public class ChatHub : Hub
 
         public void Seekall()
         {
-            //   var username = Context.User.Identity.Name;
-            //  Console.WriteLine(username);
-            //string UsersString = JsonConvert.SerializeObject(usersWhoSeekOpponent);
+            
             Clients.All.ResponceAllOpponents(usersWhoSeekOpponent.Select(x=>x.UserName));
         }
 
+        public void Disconnect()
+        {
+            
+
+           
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            var user = usersWhoSeekOpponent.Where(x => x.UserName == Context.User.Identity.Name).FirstOrDefault();
+            usersWhoSeekOpponent.Remove(user);
+            Seekall();
+            return base.OnDisconnected(stopCalled);
+        }
 
 
     }
