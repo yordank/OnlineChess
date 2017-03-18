@@ -14,19 +14,24 @@ namespace SignalRChat
 public class UserConnection
     {
       public string UserName { set; get; }
-      public string ConnectionID { set; get; }
+      public string userId { set; get; }
     }
 public class ChatHub : Hub
     {
         public static HashSet<UserConnection> usersWhoSeekOpponent = new HashSet<UserConnection>();
 
-
+        public static Dictionary<string, string> usersOpponent = new Dictionary<string, string>();
 
         public void Send(string name, string message)
         {
-            // Call the addNewMessageToPage method to update clients.
-            Clients.All.addNewMessageToPage(name, message);
 
+            string userId = usersOpponent[name];
+            // Call the addNewMessageToPage method to update clients.
+            //Clients.Client(connectionId).addNewMessageToPage( message);
+
+            Clients.User(userId).addNewMessageToPage(message);
+      
+            //  Clients.All.addNewMessageToPage(name, message);
             using (var context = new ChatDbContext())
             {
 
@@ -46,7 +51,8 @@ public class ChatHub : Hub
             //  Console.WriteLine(username);
             var us = new UserConnection();
             us.UserName = name;
-            us.ConnectionID = Context.ConnectionId;
+            us.userId = Context.User.Identity.Name;
+
 
 
 
@@ -64,8 +70,11 @@ public class ChatHub : Hub
             var user1 = usersWhoSeekOpponent.Where(x => x.UserName == username1).FirstOrDefault();
             var user2 = usersWhoSeekOpponent.Where(x => x.UserName == username2).FirstOrDefault();
 
-            Clients.Client(user1.ConnectionID).beginGame("white");
-            Clients.Client(Context.ConnectionId).beginGame("black");
+            Clients.User(user1.userId).beginGame("white");
+            Clients.User(Context.User.Identity.Name).beginGame("black");
+
+            usersOpponent[username1]= Context.User.Identity.Name;
+            usersOpponent[username2]= user1.userId;
 
             usersWhoSeekOpponent.Remove(user1);
             usersWhoSeekOpponent.Remove(user2);

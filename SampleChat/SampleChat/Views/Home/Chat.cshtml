@@ -5,6 +5,7 @@
 <!-- start example HTML --->
 <script src="./../chessboardjs-0.3.0/js/chess.js"></script>
 <div id="board" style="width: 400px"></div>
+<input type="hidden" id="displayname" />
 <p>Status: <span id="status"></span></p>
 <p>FEN: <span id="fen"></span></p>
 <p>PGN: <span id="pgn"></span></p>
@@ -25,12 +26,12 @@ var onChange = function(oldPos, newPos) {
   console.log("--------------------");
 
   $.connection.hub.start().done(function () {
-      
+
           // Call the Send method on the hub.
           chat.server.send($('#displayname').val(), ChessBoard.objToFen(newPos));
           // Clear text box and reset focus for next comment.
           $('#message').val('').focus();
-   
+
   });
 
 };
@@ -45,7 +46,11 @@ var board,
 var onDragStart = function (source, piece, position, orientation) {
     if (game.game_over() === true ||
         (game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-        (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+        (game.turn() === 'b' && piece.search(/^w/) !== -1) ||
+        (game.turn() ==='b'  && cfg.orientation=='white')||
+        (game.turn() ==='w'  && cfg.orientation=='black')
+
+        ) {
         return false;
     }
 };
@@ -57,14 +62,17 @@ var onDrop = function (source, target) {
         to: target,
         promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
-    
+
     // illegal move
     if (move === null) return 'snapback';
+
+
+
 
     updateStatus();
 
     $.connection.hub.start().done(function () {
-
+        $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
         // Call the Send method on the hub.
         chat.server.send($('#displayname').val(), game.fen());
         // Clear text box and reset focus for next comment.
@@ -72,11 +80,11 @@ var onDrop = function (source, target) {
 
     });
 
-    
+
 
 };
 
-    // update the board position after the piece snap 
+    // update the board position after the piece snap
     // for castling, en passant, pawn promotion
 var onSnapEnd = function () {
     board.position(game.fen());
@@ -114,7 +122,7 @@ var updateStatus = function () {
 
     fenEl.html(game.fen());
     pgnEl.html(game.pgn());
- 
+
 
 
 };
@@ -123,9 +131,9 @@ var updateStatus = function () {
 var cfg = {
     draggable: true,
     position: 'start',
+    orientation: '@ViewBag.orientation',
     onDragStart: onDragStart,
     onDrop: onDrop,
-    orientation: '@ViewBag.orientation',
     onSnapEnd: onSnapEnd//,
     //onChange: onChange
 };
@@ -140,17 +148,17 @@ updateStatus();
 
 $(function () {
     // Reference the auto-generated proxy for the hub.
-    
+
     // Create a function that the hub can call back to display messages.
-    chat.client.addNewMessageToPage = function (name, message) {
+    chat.client.addNewMessageToPage = function ( message) {
         // Add the message to the page.
       //  $('#discussion').append('<li><strong>' + htmlEncode(name)
         //    + '</strong>: ' + htmlEncode(message) + '</li>');
-        
+
         board.position(message);
-        
+
         game.load(message);
-         
+
         updateStatus();
     };
     // Get the user name and store it to prepend to messages.

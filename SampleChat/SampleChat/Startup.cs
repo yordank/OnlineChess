@@ -12,9 +12,9 @@ namespace SampleChat
         public void Configuration(IAppBuilder app)
         {
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<ChatDbContext, Configuration>());
-
-            app.MapSignalR();
             ConfigureAuth(app);
+            app.MapSignalR();
+            
             
         }
     }
