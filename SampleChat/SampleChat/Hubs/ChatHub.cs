@@ -15,6 +15,20 @@ public class UserConnection
     {
       public string UserName { set; get; }
       public string userId { set; get; }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as UserConnection;
+            if (other == null)
+            {
+                return false;
+            }
+            return this.UserName == other.UserName && this.userId== other.userId;
+        }
+        public override int GetHashCode()
+        {
+            return (UserName + userId).GetHashCode();
+        }
     }
 public class ChatHub : Hub
     {
@@ -22,19 +36,33 @@ public class ChatHub : Hub
 
         public static Dictionary<string, string> usersOpponent = new Dictionary<string, string>();
 
-        public void Send(string name, string message)
+        public void Send(string name, string moveString)
         {
 
             string userId = usersOpponent[name];
-           
 
-            Clients.User(userId).addNewMessageToPage(message);
+
+            var Move = moveString;
+
+            var SendMessage = new
+            {
+                ServiceName = "ChessGameMove",
+                Data = Move
+            };
+
+
+
+            var jsonChessGameMove = JsonConvert.SerializeObject(SendMessage);
+
+
+
+            Clients.User(userId).getOpponentMove(jsonChessGameMove);
       
            
             using (var context = new ChatDbContext())
             {
 
-               context.messages.Add(new Messages(message));
+               context.messages.Add(new Messages(moveString));
                context.SaveChanges();
 
             }
@@ -82,16 +110,23 @@ public class ChatHub : Hub
 
         public void Seekall()
         {
-            
-            Clients.All.ResponceAllOpponents(usersWhoSeekOpponent.Select(x=>x.UserName));
+
+            var Users = usersWhoSeekOpponent.Select(x => x.UserName);
+
+            var responceMessage = new
+            {
+                ServiceName="AllUsersWhoSeekOpponet",
+                Data=Users
+            };
+
+            var jsonUsers = JsonConvert.SerializeObject(responceMessage);
+
+            Clients.All.ResponceAllOpponents(jsonUsers);
+
+
         }
 
-        public void Disconnect()
-        {
-            
-
-           
-        }
+        
 
         public override Task OnDisconnected(bool stopCalled)
         {

@@ -35,28 +35,31 @@ after that open new browser, register a new user or logIn and you would see Invi
 
           
             // Create a function that the hub can call back to display messages.
-            chat.client.ResponceAllOpponents = function (names) {
+            chat.client.ResponceAllOpponents = function (input) {
                 // names = names.split(',');
                 // var games = $.parseJSON(names);
                 // Add the message to the page.
                 $('#discussion').empty();
 
-                for (let i = 0; i < names.length; i++) {
+                var myObj = JSON.parse(input);
 
+                //alert(myObj.Data);
+                for (let i = 0; i < myObj.Data.length; i++) {
+                    
                      
-                    if (names[i].toString() != $('#displayname').val()) {
+                    if (myObj.Data[i].toString() != $('#displayname').val()) {
 
-                        let newLiItem = '<li id="link' + i + '"><a href="#" >Play against ' + names[i].toString() + '</a></li>';
+                        let newLiItem = '<li id="link' + i + '"><a href="#" >Play against ' + myObj.Data[i].toString() + '</a></li>';
                         $('#discussion').append(newLiItem);
 
                         $('#link'+i).click(function () {
-                            chat.server.startgame(names[i].toString(), $('#displayname').val());
+                            chat.server.startgame(myObj.Data[i].toString(), $('#displayname').val());
                         });
 
                     }
                     else
                     {
-                        let newLiItem = '<li>' +'@Html.ActionLink("Play against username", null,null,null,new { onclick = "alert('Cannot play against yourself');", @Href = "#" })'.replace("username",names[i].toString()) +'</li>';
+                        let newLiItem = '<li>' + '@Html.ActionLink("Play against username", null,null,null,new { onclick = "alert('Cannot play against yourself');", @Href = "#" })'.replace("username", myObj.Data[i].toString()) + '</li>';
                         $('#discussion').append(newLiItem);
                     }
 

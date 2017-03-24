@@ -150,14 +150,15 @@ $(function () {
     // Reference the auto-generated proxy for the hub.
 
     // Create a function that the hub can call back to display messages.
-    chat.client.addNewMessageToPage = function ( message) {
+    chat.client.getOpponentMove = function (jsonChessGameMove) {
         // Add the message to the page.
       //  $('#discussion').append('<li><strong>' + htmlEncode(name)
         //    + '</strong>: ' + htmlEncode(message) + '</li>');
+        var jsonObj = JSON.parse(jsonChessGameMove);
 
-        board.position(message);
+        board.position(jsonObj.Data);
 
-        game.load(message);
+        game.load(jsonObj.Data);
 
         updateStatus();
     };
