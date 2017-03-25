@@ -9,7 +9,7 @@ namespace SampleChat.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+           // AutomaticMigrationsEnabled = true;
         }
 
         protected override void Seed(SampleChat.Models.ChatDbContext context)

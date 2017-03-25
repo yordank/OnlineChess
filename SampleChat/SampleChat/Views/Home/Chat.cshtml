@@ -1,19 +1,184 @@
 ﻿ 
 
+<style>
+    .clock {
+        font-size: 50px;
+        width:100%;
+        vertical-align: middle; 
+        
+    }
+   
+ 
+    
+   
+    
 
+
+        .clock td {
+            text-align: center;
+
+            
+        }
+
+            .clock td.turn {
+                color: yellow;
+            }
+
+            .clock td.loser {
+                background-color: #f00;
+            }
+</style>
 
 <!-- start example HTML --->
 <script src="./../chessboardjs-0.3.0/js/chess.js"></script>
-<div id="board" style="width: 400px"></div>
-<input type="hidden" id="displayname" />
-<p>Status: <span id="status"></span></p>
-<p>FEN: <span id="fen"></span></p>
-<p>PGN: <span id="pgn"></span></p>
+
+
+
+
+
+
+<div class="container">
+    <div class="row">
+        
+       
+
+
+        <div class="col-md-6 cols-xs-12 ">
+      
+            <div class="row" >
+                <div id="board" style="width: 100%"></div>
+             </div>
+            <div class="row">
+                <p>Status: <span id="status"></span></p>
+                </div>
+            </div>
+        <div class="col-md-3 cols-xs-12 ">
+            <div class="row text-center" >black</div>
+            <div class="row text-center"  >
+                <table class=clock>
+                    <tr>
+                        @{ string up = string.Empty;
+                            if (ViewBag.orientation == "white")
+                            { up = "black"; }
+                            else
+                            { up = "white"; }
+
+
+                        }
+                        <td id=@up class=turn></td>
+
+                    </tr>
+                    <tr>
+                        <td id=@ViewBag.orientation></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="row text-center">white</div>
+            <div class="row">
+                 
+            </div>
+            
+            <div class="row text-center">
+                <input type="text" id="message" />
+                <input type="button" id="sendmessage" value="Send" />
+                <input type="hidden" id="displayname" />
+                <ul id="discussion"></ul>   
+            </div>
+            
+            
+
+
+        </div>
+
+        
+       
+
+         
+        
+
+    </div>
+</div>
+ 
+<!--<p>FEN: <span id="fen"></span></p>-->
+<!--<p>PGN: <span id="pgn"></span></p>-->
 <!-- end example HTML --->
 
 <script src="./../chessboardjs-0.3.0/js/json3.min.js"></script>
 <script src="./../chessboardjs-0.3.0/js/jquery-1.10.1.min.js"></script>
 <script src="./../chessboardjs-0.3.0/js/chessboard-0.3.0.js"></script>
+
+
+
+
+
+
+
+
+
+<script>
+
+        var turn=0,rem=[@ViewBag.clockSeconds];
+        rem.push(rem[0]) //rem:remaining time
+        var pad=function(x){
+            return('0'+x).slice(-2)
+        }
+        var fmt=function(t){
+            var h=Math.floor(t/3600),m=Math.floor(t/60)%60,s=t%60;
+            return(h?h+':'+pad(m):m)+':'+pad(s)
+        }
+        var els=[];
+
+        els.push(document.getElementById('white'));
+
+        els.push(document.getElementById('black'));
+
+        var upd = function () {
+
+            if(rem[turn]>0)
+                rem[turn]--;
+            for(var i=0;i<2;i++)
+                els[i].textContent=fmt(rem[i])
+
+            if(rem[turn]<=0 ){
+                var l=els[turn].classList;
+                l.remove('turn');
+
+                l.add('loser');
+                //clearInterval(iid)
+            }
+        }
+        var switchTurn=function(){
+            if(!iid)return
+            els[turn].classList.remove('turn');
+            turn=1-turn
+            els[turn].classList.add('turn');
+            rem[turn] += 0 //add 2 seconds per move
+
+            
+               
+            
+
+       }
+       // document.body.onmousedown=function(){switchTurn();return!1}
+       // document.body.onkeydown=function(e){if(e.keyCode===32){switchTurn();return!1}}
+        els[0].classList.add('turn')
+        var iid=setInterval(upd,1000) //interval id
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
 var init = function() {
@@ -25,14 +190,14 @@ var onChange = function(oldPos, newPos) {
   console.log("New position: " + ChessBoard.objToFen(newPos));
   console.log("--------------------");
 
-  $.connection.hub.start().done(function () {
+  /*$.connection.hub.start().done(function () {
 
           // Call the Send method on the hub.
           chat.server.send($('#displayname').val(), ChessBoard.objToFen(newPos));
           // Clear text box and reset focus for next comment.
           $('#message').val('').focus();
 
-  });
+  });*/
 
 };
 var board,
@@ -71,12 +236,14 @@ var onDrop = function (source, target) {
 
     updateStatus();
 
+    switchTurn();
+
     $.connection.hub.start().done(function () {
         $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
         // Call the Send method on the hub.
         chat.server.send($('#displayname').val(), game.fen());
         // Clear text box and reset focus for next comment.
-        $('#message').val('').focus();
+       // $('#message').val('').focus();
 
     });
 
@@ -101,11 +268,13 @@ var updateStatus = function () {
     // checkmate?
     if (game.in_checkmate() === true) {
         status = 'Game over, ' + moveColor + ' is in checkmate.';
+        clearInterval(iid);;
     }
 
         // draw?
     else if (game.in_draw() === true) {
         status = 'Game over, drawn position';
+        clearInterval(iid);;
     }
 
         // game still on
@@ -120,8 +289,8 @@ var updateStatus = function () {
 
     statusEl.html(status);
 
-    fenEl.html(game.fen());
-    pgnEl.html(game.pgn());
+   // fenEl.html(game.fen());
+   // pgnEl.html(game.pgn());
 
 
 
@@ -137,7 +306,8 @@ var cfg = {
     onSnapEnd: onSnapEnd//,
     //onChange: onChange
 };
-var board = ChessBoard('board', cfg);
+    var board = ChessBoard('board', cfg);
+   // $(window).resize(board.resize);
 var chat = $.connection.chatHub;
 $('#startPositionBtn').on('click', board.start);
 
@@ -161,6 +331,9 @@ $(function () {
         game.load(jsonObj.Data);
 
         updateStatus();
+
+        switchTurn();
+
     };
     // Get the user name and store it to prepend to messages.
 
@@ -171,15 +344,31 @@ $(function () {
     $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
 
 
+    chat.client.addNewMessageToPage = function (name, message,flag) {
+        // Add the message to the page.
+        if (flag == 0) {
+            $('#discussion').append('<li><strong>' + htmlEncode(name)
+                + '</strong>: ' + htmlEncode(message) + '</li>');
+        }
 
+        if(flag==1){
+            status = message;
+            statusEl.html(status);
+            clearInterval(iid);;
+        }
+
+
+
+
+    };
 
     // Set initial focus to message input box.
-    $('#message').focus();
+  //  $('#message').focus();
     // Start the connection.
     $.connection.hub.start().done(function () {
         $('#sendmessage').click(function () {
             // Call the Send method on the hub.
-            chat.server.send($('#displayname').val(), $('#message').val());
+            chat.server.chatsend($('#displayname').val(), $('#message').val());
             // Clear text box and reset focus for next comment.
             $('#message').val('').focus();
         });
@@ -198,6 +387,14 @@ $(document).ready(init);
 </script>
 
 
+ 
+
+
+
+
+
+
+
 <h2>Chess</h2>
 <!--<div class="container">-->
  <!--   <input type="text" id="message" /> -->
@@ -205,7 +402,7 @@ $(document).ready(init);
 <!--    <input type="hidden" id="displayname" />-->
  <!--   <ul id="discussion"></ul>-->
 <!--   </div> -->
- 
+
 @section scripts {
     <!--Script references. -->
     <!--The jQuery library is required and is referenced by default in _Layout.cshtml. -->
@@ -214,5 +411,5 @@ $(document).ready(init);
     <!--Reference the autogenerated SignalR hub script. -->
     <script src="~/signalr/hubs"></script>
     <!--SignalR script to update the chat page and send messages.-->
-     
+
 }

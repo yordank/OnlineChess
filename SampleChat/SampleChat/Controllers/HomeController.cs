@@ -13,12 +13,12 @@ namespace SampleChat.Controllers
             //return RedirectToAction("Chat");
             return RedirectToAction("Seek");
 
-            return View();
+            //return View();
         }
-        public ActionResult Chat(string orientation)
+        public ActionResult Chat(string orientation,int time)
         {
             ViewBag.orientation = orientation;
-
+            ViewBag.clockSeconds = time;
             return View();
         }
 
