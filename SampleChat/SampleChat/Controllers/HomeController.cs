@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SampleChat.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,6 +22,21 @@ namespace SampleChat.Controllers
             ViewBag.clockSeconds = time;
             return View();
         }
+
+        public ActionResult ListGames()
+        {
+
+            using (var context=new ChatDbContext())
+            {
+                List<Results> results = context.results.OrderByDescending(x=>x.Id).ToList();
+
+
+                return View(results);
+            }
+            
+        }
+
+
 
         public ActionResult Seek()
         {
