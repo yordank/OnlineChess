@@ -82,7 +82,7 @@ C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\Microso
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.csprojResolveAssemblyReference.cache
-C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.Migrations.addtableMessage.resources
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.csproj.GenerateResource.Cache
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.dll
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.pdb
+C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.Migrations.initial.resources
