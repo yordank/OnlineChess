@@ -53,7 +53,7 @@ after that open new browser, register a new user or logIn and you would see Invi
                 for (let i = 0; i < myObj.Data.length; i++) {
                     
                      
-                    if (myObj.Data[i].toString() != $('#displayname').val()) {
+                    if (myObj.Data[i].Username.toString() != $('#displayname').val()) {
 
                         let newLiItem = '<li id="link' + i + '"><a href="#" >Play against ' + myObj.Data[i].Username.toString() + ' ' + myObj.Data[i].Time.toString() + 'minutes</a></li>';
                         $('#discussion').append(newLiItem);
@@ -65,7 +65,7 @@ after that open new browser, register a new user or logIn and you would see Invi
                     }
                     else
                     {
-                        let newLiItem = '<li>' + '@Html.ActionLink("Play against username", null,null,null,new { onclick = "alert('Cannot play against yourself');", @Href = "#" })'.replace("username", myObj.Data[i].toString()) + '</li>';
+                        let newLiItem = '<li>' + '@Html.ActionLink("Play against username", null,null,null,new { onclick = "alert('Cannot play against yourself');", @Href = "#" })'.replace("username", myObj.Data[i].Username.toString()) + '</li>';
                         $('#discussion').append(newLiItem);
                     }
 
