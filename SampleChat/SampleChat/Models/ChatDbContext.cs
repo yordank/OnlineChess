@@ -18,6 +18,8 @@ namespace SampleChat.Models
         }
 
         public virtual IDbSet<Messages>messages{get;set;}
+
+        public virtual IDbSet<Results> results { get; set; }
         public static ChatDbContext Create()
         {
             return new ChatDbContext();
