@@ -49,8 +49,57 @@ public class ChatHub : Hub
             Clients.User(name).addNewMessageToPage(name, message,0);
 
         }
-        public void Send(string name, string moveString)
+        public void Send(string name, string moveString,string status)
         {
+
+
+            if (status == "Game over, White is in checkmate.")
+            {
+                using (var context = new ChatDbContext())
+                {
+
+                    Results res = new Results() { WhiteUserName = usersOpponent[name].OpponentName, BlackUserName = name, Result = "B" };
+                        context.results.Add(res);
+                        context.SaveChanges();
+                   
+
+
+                }
+            }
+
+            if (status == "Game over, Black is in checkmate.")
+            {
+                using (var context = new ChatDbContext())
+                {
+
+                    context.results.Add(new Results() { WhiteUserName = name, BlackUserName = usersOpponent[name].OpponentName, Result = "W" });
+                    context.SaveChanges();
+
+
+
+                }
+            }
+
+            if(status== "Game over, drawn position.")
+            {
+                using (var context = new ChatDbContext())
+                {
+                    if (usersOpponent[name].Color == "white")
+                    {
+                        context.results.Add(new Results() { WhiteUserName = name, BlackUserName = usersOpponent[name].OpponentName, Result = "D" });
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        context.results.Add(new Results() { WhiteUserName = usersOpponent[name].OpponentName, BlackUserName = name, Result = "D" });
+                        context.SaveChanges();
+                    }
+
+
+                }
+            }
+
+
             string userId = usersOpponent[name].OpponentName;
 
 
@@ -132,8 +181,8 @@ public class ChatHub : Hub
             Clients.User(Context.User.Identity.Name).beginGame("black",time*60);
 
 
-            usersOpponent[username1]= new OpponentAndTimer( Context.User.Identity.Name,1000*60*time);
-            usersOpponent[username2]=new OpponentAndTimer( user1.userId,1000*60*time);
+            usersOpponent[username1]= new OpponentAndTimer(username1, Context.User.Identity.Name,1000*60*time,"white");
+            usersOpponent[username2]=new OpponentAndTimer(username2, user1.userId,1000*60*time,"black");
 
             usersWhoSeekOpponent.Remove(user1);
             usersWhoSeekOpponent.Remove(user2);
@@ -177,7 +226,7 @@ public class ChatHub : Hub
     public class OpponentAndTimer
 
     {
-        public OpponentAndTimer(string OpponentName,double time)
+        public OpponentAndTimer(string Name,string OpponentName,double time,string Color)
         {
             aTimer = new System.Timers.Timer();
             this.aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -188,12 +237,20 @@ public class ChatHub : Hub
             this.OpponentName = OpponentName;
 
             this.Status = "Playing";
+
+            this.Color = Color;
+
+            this.Name = Name;
         }
         public System.Timers.Timer aTimer { get; set; }
         public Stopwatch sw { get; set; }
+
+        public string Name { get; set; }
         public string OpponentName { get; set; }
 
         public string Status { get; set; }
+
+        public string Color { get; set; }
 
         public void start()
         {
@@ -230,9 +287,18 @@ public class ChatHub : Hub
 
             using (var context = new ChatDbContext())
             {
+                if(this.Color=="white")
+                {
+                    context.results.Add(new Results() { WhiteUserName=this.Name,BlackUserName=this.OpponentName,Result="B"});
+                    context.SaveChanges();
+                }
+                else
+                {
+                    context.results.Add(new Results() { WhiteUserName = this.OpponentName, BlackUserName = this.Name, Result = "W" });
+                    context.SaveChanges();
+                }
 
-                context.messages.Add(new Messages(this.OpponentName+" won on time LIMIT"));
-                context.SaveChanges();
+                
 
             }
 
