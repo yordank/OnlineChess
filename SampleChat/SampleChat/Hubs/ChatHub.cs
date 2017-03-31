@@ -62,7 +62,7 @@ namespace SignalRChat
 
             }
 
-
+            //test
 
             if (status == "Game over, White is in checkmate.")
             {
