@@ -210,6 +210,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\Games.cs" />
     <Compile Include="Migrations\201703252206094_initial.cs" />
     <Compile Include="Migrations\201703252206094_initial.Designer.cs">
       <DependentUpon>201703252206094_initial.cs</DependentUpon>
