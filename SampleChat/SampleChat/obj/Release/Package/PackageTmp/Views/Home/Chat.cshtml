@@ -202,9 +202,15 @@ var onChange = function(oldPos, newPos) {
 };
 var board,
   game = new Chess(),
+  status = '',
+  whitePlayer = '@ViewBag.white',
+  blackPlayer= '@ViewBag.black',
   statusEl = $('#status'),
   fenEl = $('#fen'),
   pgnEl = $('#pgn');
+
+
+    //alert(whitePlayer+" "+blackPlayer);
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -241,9 +247,17 @@ var onDrop = function (source, target) {
     $.connection.hub.start().done(function () {
         $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
         // Call the Send method on the hub.
-        chat.server.send($('#displayname').val(), game.fen(),status);
+
+        //var lastmove = game.history()[game.history().length - 1];
+        //var move = lastmove.from + '-' + lastmove.to;
+
+         
+        chat.server.send(whitePlayer,blackPlayer,'@ViewBag.orientation',game.fen(), status);
+
+        //alert(lastmove);
         // Clear text box and reset focus for next comment.
-       // $('#message').val('').focus();
+        // $('#message').val('').focus();
+        //alert(move);
 
     });
 
@@ -251,6 +265,11 @@ var onDrop = function (source, target) {
 
 };
 
+    function set_turn(chess, color) {
+        var tokens = chess.fen().split(' ');
+        tokens[1] = color;
+        chess.load(tokens.join(' '));
+    }
     // update the board position after the piece snap
     // for castling, en passant, pawn promotion
 var onSnapEnd = function () {
@@ -258,7 +277,7 @@ var onSnapEnd = function () {
 };
 
 var updateStatus = function () {
-    var status = '';
+    status = '';
 
     var moveColor = 'White';
     if (game.turn() === 'b') {
@@ -272,10 +291,11 @@ var updateStatus = function () {
     }
 
         // draw?
-    else if (game.in_draw() === true) {
-        status = 'Game over, drawn position';
+    else if (game.in_draw() === true  || game.in_threefold_repetition()===true || game.in_stalemate()===true) {
+        status = 'Game over, drawn position.';
         clearInterval(iid);;
     }
+
 
         // game still on
     else {
@@ -290,7 +310,7 @@ var updateStatus = function () {
     statusEl.html(status);
 
    // fenEl.html(game.fen());
-   // pgnEl.html(game.pgn());
+    pgnEl.html(game.pgn());
 
 
 
@@ -326,9 +346,19 @@ $(function () {
         //    + '</strong>: ' + htmlEncode(message) + '</li>');
         var jsonObj = JSON.parse(jsonChessGameMove);
 
+
+
+
+
+
         board.position(jsonObj.Data);
+        //board.move(jsonObj.Data);
+
+
 
         game.load(jsonObj.Data);
+        //game.move(jsonObj.Data, { sloppy: true });
+
 
         updateStatus();
 

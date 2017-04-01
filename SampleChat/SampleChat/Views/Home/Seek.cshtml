@@ -59,7 +59,7 @@ after that open new browser, register a new user or logIn and you would see Invi
                         $('#discussion').append(newLiItem);
 
                         $('#link'+i).click(function () {
-                            chat.server.startgame(myObj.Data[i].Username.toString(), $('#displayname').val(), myObj.Data[i].Time);
+                            chat.server.startgame(myObj.Data[i].Username, $('#displayname').val(), myObj.Data[i].Time);
                         });
 
                     }
@@ -74,8 +74,9 @@ after that open new browser, register a new user or logIn and you would see Invi
 
             };
 
-            chat.client.beginGame=function(orientation,time){
-                window.location.href="./Chat?orientation="+orientation+"&time="+time;
+            chat.client.beginGame = function (orientation, time,white,black) {
+                 
+                window.location.href = "./Chat?orientation=" + orientation + "&time=" + time + "&white=" + white + "&black=" + black;
             }
 
 

@@ -15,44 +15,34 @@ namespace SignalRChat
 {
 
 
-    public class UserConnection
-    {
-        public string UserName { set; get; }
-        public string userId { set; get; }
 
-        public int Time { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            var other = obj as UserConnection;
-            if (other == null)
-            {
-                return false;
-            }
-            return this.UserName == other.UserName && this.userId == other.userId;
-        }
-        public override int GetHashCode()
-        {
-            return (UserName + userId).GetHashCode();
-        }
-    }
     public class ChatHub : Hub
     {
         public static HashSet<UserConnection> usersWhoSeekOpponent = new HashSet<UserConnection>();
 
         public static Dictionary<string, Game> GamesOnline = new Dictionary<string, Game>();
 
-        public void chatsend(string name, string message)
+        public void chatsend(string GameName, string message)
         {
-            string userId = GamesOnline[name].OpponentName;
+            string white = GamesOnline[GameName].White;
 
-            Clients.User(userId).addNewMessageToPage(name, message, 0);
+            string black = GamesOnline[GameName].Black;
 
-            Clients.User(name).addNewMessageToPage(name, message, 0);
+            string sender= Context.User.Identity.Name;
+
+            Clients.User(white).addNewMessageToPage(sender, message, 0);
+
+            Clients.User(black).addNewMessageToPage(sender, message, 0);
 
         }
-        public void Send(string name, string moveString, string status)
+
+
+
+        public void Send(string white,string black,string color, string moveString, string status)
         {
+            string gameName = white  + black;
+
+            string sender = Context.User.Identity.Name;
 
             using (var context = new ChatDbContext())
             {
@@ -68,17 +58,10 @@ namespace SignalRChat
             {
                 using (var context = new ChatDbContext())
                 {
-
-                    Results res = new Results() { WhiteUserName = GamesOnline[name].OpponentName, BlackUserName = name, Result = "B" };
+                    Results res = new Results() { WhiteUserName = white, BlackUserName = black, Result = "B" };
                     context.results.Add(res);
-
-                    context.Entry(res).State = EntityState.Added;
-
-
-
                     context.SaveChanges();
-
-                    
+                                       
                 }
             }
 
@@ -87,13 +70,9 @@ namespace SignalRChat
                 using (var context = new ChatDbContext())
                 {
 
-                    context.results.Add(new Results() { WhiteUserName = name, BlackUserName = GamesOnline[name].OpponentName, Result = "W" });
-
-                   
-
+                    context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "W" });
                     context.SaveChanges();
-
-                   
+                                       
                 }
             }
 
@@ -101,38 +80,31 @@ namespace SignalRChat
             {
                 using (var context = new ChatDbContext())
                 {
-                    if (GamesOnline[name].Color == "white")
-                    {
-                        context.results.Add(new Results() { WhiteUserName = name, BlackUserName = GamesOnline[name].OpponentName, Result = "D" });
+                     
+                        context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "D" });
                         context.SaveChanges();
-                    }
-                    else
-                    {
-                        context.results.Add(new Results() { WhiteUserName = GamesOnline[name].OpponentName, BlackUserName = name, Result = "D" });
-                        context.SaveChanges();
-                    }
+             
                     
                 }
             }
 
 
-            string userId = GamesOnline[name].OpponentName;
+           
 
 
-            if (GamesOnline[name].Status == "Lost on Time")
+            if (GamesOnline[gameName].Status != "Playing")
             {
+             
+                Clients.User(white).addNewMessageToPage(sender, $"{GamesOnline[gameName].Status}", 1);
 
-
-                Clients.User(userId).addNewMessageToPage(name, $"{name} lost on time!", 1);
-
-                Clients.User(name).addNewMessageToPage(name, $"{name} lost on time!", 1);
+                Clients.User(black).addNewMessageToPage(sender, $"{GamesOnline[gameName].Status}", 1);
 
                 return;
             }
 
 
 
-            GamesOnline[name].stop();
+            GamesOnline[gameName].stopClock(color);
 
 
             var Move = moveString;
@@ -143,20 +115,29 @@ namespace SignalRChat
 
                 Data = Move,
 
-                TimeOpponet = GamesOnline[name].aTimer.Interval / 1000,
+               // TimeOpponet = GamesOnline[name].aTimer.Interval / 1000,
 
-                TimeUser = GamesOnline[userId].aTimer.Interval / 1000
+               // TimeUser = GamesOnline[userId].aTimer.Interval / 1000
 
             };
 
-            GamesOnline[userId].start();
+            if(color=="white")
+            GamesOnline[gameName].startClock("black");
+            if (color == "black")
+            GamesOnline[gameName].startClock("white");
+
+
+
 
             var jsonChessGameMove = JsonConvert.SerializeObject(SendMessage);
 
-            Clients.User(userId).getOpponentMove(jsonChessGameMove);
+            if(sender==white)
+            Clients.User(black).getOpponentMove(jsonChessGameMove);
+
+            if (sender == black)
+            Clients.User(white).getOpponentMove(jsonChessGameMove);
 
 
-          
 
         }
 
@@ -167,8 +148,7 @@ namespace SignalRChat
         {
 
             var us = new UserConnection();
-            us.UserName = name;
-            us.userId = Context.User.Identity.Name;
+            us.userId = name;
             us.Time = time;
 
 
@@ -182,28 +162,34 @@ namespace SignalRChat
         public void Startgame(string username1, string username2, int time)
         {
 
+            {
+                GamesOnline[username1 + username2] = new Game(username1, username2, 1000 * 60 * time);
 
+                Clients.User(username1).beginGame("white", time * 60, username1, username2);
+                Clients.User(username2).beginGame("black", time * 60, username1, username2);
+            }
 
-            var user1 = usersWhoSeekOpponent.Where(x => x.UserName == username1).FirstOrDefault();
-            var user2 = usersWhoSeekOpponent.Where(x => x.UserName == username2).FirstOrDefault();
+            var user1 = usersWhoSeekOpponent.Where(x => x.userId == username1).FirstOrDefault();
 
-            Clients.User(user1.userId).beginGame("white", time * 60);
-            Clients.User(Context.User.Identity.Name).beginGame("black", time * 60);
-
-
-            GamesOnline[username1] = new Game(username1, Context.User.Identity.Name, 1000 * 60 * time, "white");
-            GamesOnline[username2] = new Game(username2, user1.userId, 1000 * 60 * time, "black");
+            var user2 = usersWhoSeekOpponent.Where(x => x.userId == username2).FirstOrDefault();
 
             usersWhoSeekOpponent.Remove(user1);
+
             usersWhoSeekOpponent.Remove(user2);
 
+          
+
+            int a = 5;
+
             Seekall();
+
+
         }
 
         public void Seekall()
         {
 
-            var Users = usersWhoSeekOpponent.Select(x => new { Username = x.UserName, Time = x.Time });
+            var Users = usersWhoSeekOpponent.Select(x => new { Username = x.userId, Time = x.Time });
 
             var responceMessage = new
             {
@@ -223,7 +209,7 @@ namespace SignalRChat
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var user = usersWhoSeekOpponent.Where(x => x.UserName == Context.User.Identity.Name).FirstOrDefault();
+            var user = usersWhoSeekOpponent.Where(x => x.userId == Context.User.Identity.Name).FirstOrDefault();
             usersWhoSeekOpponent.Remove(user);
             Seekall();
             return base.OnDisconnected(stopCalled);

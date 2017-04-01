@@ -202,10 +202,15 @@ var onChange = function(oldPos, newPos) {
 };
 var board,
   game = new Chess(),
-  status='',
+  status = '',
+  whitePlayer = '@ViewBag.white',
+  blackPlayer= '@ViewBag.black',
   statusEl = $('#status'),
   fenEl = $('#fen'),
   pgnEl = $('#pgn');
+
+
+    //alert(whitePlayer+" "+blackPlayer);
 
     // do not pick up pieces if the game is over
     // only pick up pieces for the side to move
@@ -243,10 +248,11 @@ var onDrop = function (source, target) {
         $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
         // Call the Send method on the hub.
 
-        var lastmove = game.history()[game.history().length - 1];
+        //var lastmove = game.history()[game.history().length - 1];
         //var move = lastmove.from + '-' + lastmove.to;
 
-        chat.server.send($('#displayname').val(),game.fen(), status);
+         
+        chat.server.send(whitePlayer,blackPlayer,'@ViewBag.orientation',game.fen(), status);
 
         //alert(lastmove);
         // Clear text box and reset focus for next comment.
@@ -289,7 +295,7 @@ var updateStatus = function () {
         status = 'Game over, drawn position.';
         clearInterval(iid);;
     }
-         
+
 
         // game still on
     else {
@@ -341,19 +347,19 @@ $(function () {
         var jsonObj = JSON.parse(jsonChessGameMove);
 
 
-    
+
 
 
 
         board.position(jsonObj.Data);
         //board.move(jsonObj.Data);
 
-       
+
 
         game.load(jsonObj.Data);
         //game.move(jsonObj.Data, { sloppy: true });
 
- 
+
         updateStatus();
 
         switchTurn();

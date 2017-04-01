@@ -16,10 +16,16 @@ namespace SampleChat.Controllers
 
             //return View();
         }
-        public ActionResult Chat(string orientation,int time)
+        public ActionResult Chat(string orientation,string time,string white,string black)
         {
             ViewBag.orientation = orientation;
-            ViewBag.clockSeconds = time;
+
+            ViewBag.clockSeconds =time;
+
+            ViewBag.white = white;
+
+            ViewBag.black = black;
+
             return View();
         }
 
