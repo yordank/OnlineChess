@@ -22,11 +22,9 @@ namespace SignalRChat
 
         public static Dictionary<string, Game> GamesOnline = new Dictionary<string, Game>();
 
-        public void chatsend(string GameName, string message)
+        public void chatsend(string white,string black, string message)
         {
-            string white = GamesOnline[GameName].White;
-
-            string black = GamesOnline[GameName].Black;
+   
 
             string sender= Context.User.Identity.Name;
 
@@ -115,9 +113,9 @@ namespace SignalRChat
 
                 Data = Move,
 
-               // TimeOpponet = GamesOnline[name].aTimer.Interval / 1000,
+                TimeWhite =(int)(GamesOnline[gameName].WhiteClock.aTimer.Interval / 1000),
 
-               // TimeUser = GamesOnline[userId].aTimer.Interval / 1000
+                TimeBlack = (int)(GamesOnline[gameName].BlackClock.aTimer.Interval / 1000)
 
             };
 

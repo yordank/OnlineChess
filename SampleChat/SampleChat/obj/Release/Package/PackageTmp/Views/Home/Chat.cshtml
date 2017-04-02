@@ -1,36 +1,87 @@
 ﻿ 
 
-<style>
-    .clock {
-        font-size: 50px;
-        width:100%;
-        vertical-align: middle; 
-        
-    }
-   
  
-    
-   
-    
-
-
-        .clock td {
-            text-align: center;
-
-            
-        }
-
-            .clock td.turn {
-                color: yellow;
-            }
-
-            .clock td.loser {
-                background-color: #f00;
-            }
-</style>
 
 <!-- start example HTML --->
 <script src="./../chessboardjs-0.3.0/js/chess.js"></script>
+
+
+
+<script>
+
+
+    var MyTime =@ViewBag.clockSeconds  ;
+    var OpponentTime =@ViewBag.clockSeconds  ;
+
+    var My_Time;
+    var Opponent_Time;
+
+var MyTimeFunc=function (){
+     MyTime --;
+    // Output the result in an element with id="demo"
+    document.getElementById("MyClock").innerHTML = Math.floor(MyTime / 60) + ":" + MyTime%60;
+    // If the count down is over, write some text
+    if (MyTime < 0) {
+        clearInterval(My_Time);
+        document.getElementById("MyClock").innerHTML = "EXPIRED";
+    }
+}
+
+
+var OpponentTimeFunc=function (){
+     OpponentTime --;
+    // Output the result in an element with id="demo"
+    document.getElementById("OpponentClock").innerHTML = Math.floor(OpponentTime / 60) + ":" + OpponentTime%60;
+    // If the count down is over, write some text
+    if (OpponentTime < 0) {
+        clearInterval(Opponent_Time);
+        document.getElementById("OpponentClock").innerHTML = "EXPIRED";
+    }
+}
+// Set the date we're counting down to
+
+
+// Update the count down every 1 second
+ //My_Time = setInterval(MyTimeFunc, 1000);
+ //Opponent_Time = setInterval(OpponentTimeFunc, 1000);
+
+
+function setTime(newTime,user)
+{
+    if(user==="Me")
+	MyTime=newTime;
+	if(user==="Opponent")
+	OpponentTime=newTime;
+}
+
+function startTime(user)
+{
+    if(user==="Me")
+	{
+	  My_Time = setInterval(MyTimeFunc, 1000);
+	}
+
+	if(user==="Opponent")
+	{
+	  Opponent_Time = setInterval(OpponentTimeFunc, 1000);
+	}
+
+
+}
+function stopTime(user)
+{
+		if(user==="Me")
+		{
+         clearInterval(My_Time);
+	    }
+		if(user==="Opponent")
+		{
+		 clearInterval(Opponent_Time);
+		}
+}
+</script>
+
+
 
 
 
@@ -45,38 +96,27 @@
 
         <div class="col-md-6 cols-xs-12 ">
       
+            <div class="row" id="Opponent" style="text-align: center; font-size: 30px;">
+            
+                 <p id="OpponentClock"></p> 
+                </div>
+            
             <div class="row" >
                 <div id="board" style="width: 100%"></div>
              </div>
+
+            <div class="row" id="Me" style="text-align: center; font-size: 30px;">
+           
+                <p id="MyClock"></p> 
+            </div>
+
             <div class="row">
                 <p>Status: <span id="status"></span></p>
                 </div>
             </div>
         <div class="col-md-3 cols-xs-12 ">
-            <div class="row text-center" >black</div>
-            <div class="row text-center"  >
-                <table class=clock>
-                    <tr>
-                        @{ string up = string.Empty;
-                            if (ViewBag.orientation == "white")
-                            { up = "black"; }
-                            else
-                            { up = "white"; }
-
-
-                        }
-                        <td id=@up class=turn></td>
-
-                    </tr>
-                    <tr>
-                        <td id=@ViewBag.orientation></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="row text-center">white</div>
-            <div class="row">
-                 
-            </div>
+          
+     
             
             <div class="row text-center">
                 <input type="text" id="message" />
@@ -106,71 +146,6 @@
 <script src="./../chessboardjs-0.3.0/js/json3.min.js"></script>
 <script src="./../chessboardjs-0.3.0/js/jquery-1.10.1.min.js"></script>
 <script src="./../chessboardjs-0.3.0/js/chessboard-0.3.0.js"></script>
-
-
-
-
-
-
-
-
-
-<script>
-
-        var turn=0,rem=[@ViewBag.clockSeconds];
-        rem.push(rem[0]) //rem:remaining time
-        var pad=function(x){
-            return('0'+x).slice(-2)
-        }
-        var fmt=function(t){
-            var h=Math.floor(t/3600),m=Math.floor(t/60)%60,s=t%60;
-            return(h?h+':'+pad(m):m)+':'+pad(s)
-        }
-        var els=[];
-
-        els.push(document.getElementById('white'));
-
-        els.push(document.getElementById('black'));
-
-        var upd = function () {
-
-            if(rem[turn]>0)
-                rem[turn]--;
-            for(var i=0;i<2;i++)
-                els[i].textContent=fmt(rem[i])
-
-            if(rem[turn]<=0 ){
-                var l=els[turn].classList;
-                l.remove('turn');
-
-                l.add('loser');
-                //clearInterval(iid)
-            }
-        }
-        var switchTurn=function(){
-            if(!iid)return
-            els[turn].classList.remove('turn');
-            turn=1-turn
-            els[turn].classList.add('turn');
-            rem[turn] += 0 //add 2 seconds per move
-
-            
-               
-            
-
-       }
-       // document.body.onmousedown=function(){switchTurn();return!1}
-       // document.body.onkeydown=function(e){if(e.keyCode===32){switchTurn();return!1}}
-        els[0].classList.add('turn')
-        var iid=setInterval(upd,1000) //interval id
-
-
-
-
-</script>
-
-
-
 
 
 
@@ -240,9 +215,13 @@ var onDrop = function (source, target) {
 
 
 
-    updateStatus();
+  
 
-    switchTurn();
+
+    startTime("Opponent");
+    stopTime("Me");
+   
+    updateStatus();
 
     $.connection.hub.start().done(function () {
         $('#displayname').val('@HttpContext.Current.User.Identity.Name.ToString()');
@@ -251,8 +230,10 @@ var onDrop = function (source, target) {
         //var lastmove = game.history()[game.history().length - 1];
         //var move = lastmove.from + '-' + lastmove.to;
 
-         
+
         chat.server.send(whitePlayer,blackPlayer,'@ViewBag.orientation',game.fen(), status);
+
+
 
         //alert(lastmove);
         // Clear text box and reset focus for next comment.
@@ -287,13 +268,21 @@ var updateStatus = function () {
     // checkmate?
     if (game.in_checkmate() === true) {
         status = 'Game over, ' + moveColor + ' is in checkmate.';
-        clearInterval(iid);;
+        
+        stopTime("Me");
+        
+        stopTime("Opponent");
+
     }
 
         // draw?
     else if (game.in_draw() === true  || game.in_threefold_repetition()===true || game.in_stalemate()===true) {
         status = 'Game over, drawn position.';
-        clearInterval(iid);;
+       
+        stopTime("Me");
+        
+        stopTime("Opponent");
+
     }
 
 
@@ -310,7 +299,7 @@ var updateStatus = function () {
     statusEl.html(status);
 
    // fenEl.html(game.fen());
-    pgnEl.html(game.pgn());
+   // pgnEl.html(game.pgn());
 
 
 
@@ -346,6 +335,7 @@ $(function () {
         //    + '</strong>: ' + htmlEncode(message) + '</li>');
         var jsonObj = JSON.parse(jsonChessGameMove);
 
+        //alert("timeWhite:" + jsonObj.TimeWhite + " timeBlack" + jsonObj.TimeBlack);
 
 
 
@@ -360,9 +350,27 @@ $(function () {
         //game.move(jsonObj.Data, { sloppy: true });
 
 
-        updateStatus();
+       
 
-        switchTurn();
+
+        stopTime("Opponent");
+        startTime("Me");
+
+        if(whitePlayer=='@HttpContext.Current.User.Identity.Name.ToString()')
+        {
+            setTime(jsonObj.TimeWhite,"Me");
+            setTime(jsonObj.TimeBlack,"Opponent");
+
+        }
+
+        else
+        {
+            setTime(jsonObj.TimeBlack,"Me");
+            setTime(jsonObj.TimeWhite,"Opponent");
+        }
+
+        updateStatus();
+         
 
     };
     // Get the user name and store it to prepend to messages.
@@ -382,9 +390,13 @@ $(function () {
         }
 
         if(flag==1){
+            
             status = message;
             statusEl.html(status);
-            clearInterval(iid);;
+
+            stopTime("Me");
+            stopTime("Opponent");
+
         }
 
 
@@ -398,7 +410,7 @@ $(function () {
     $.connection.hub.start().done(function () {
         $('#sendmessage').click(function () {
             // Call the Send method on the hub.
-            chat.server.chatsend($('#displayname').val(), $('#message').val());
+            chat.server.chatsend('@ViewBag.white','@ViewBag.black', $('#message').val());
             // Clear text box and reset focus for next comment.
             $('#message').val('').focus();
         });
