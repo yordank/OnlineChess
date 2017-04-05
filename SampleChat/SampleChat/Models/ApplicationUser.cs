@@ -11,6 +11,16 @@ namespace SampleChat.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        public Country Country { get; set; }
+
+        public virtual ICollection<Ratings> Ratings { get; set; }
+
+      
+        public virtual  ICollection<ChatMessages> SenderMessage { get; set; }
+
+        public virtual  ICollection<ChatMessages> ReceiverMessage { get; set; }
+
+        public virtual ICollection<GamePlayer> GamesPlayers { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

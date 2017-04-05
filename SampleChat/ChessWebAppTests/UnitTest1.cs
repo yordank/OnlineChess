@@ -17,6 +17,7 @@ namespace ChessWebAppTests
 
             var controller = new HomeController();
             var result = controller.ListGames() as ViewResult;
+            Assert.AreEqual(1, 1);
             Assert.IsInstanceOfType(result.Model, typeof(List<Results>));
         }
         [TestMethod]

@@ -51,6 +51,7 @@ namespace SignalRChat
             }
 
             //test
+            int flag = 0;
 
             if (status == "Game over, White is in checkmate.")
             {
@@ -59,7 +60,7 @@ namespace SignalRChat
                     Results res = new Results() { WhiteUserName = white, BlackUserName = black, Result = "B" };
                     context.results.Add(res);
                     context.SaveChanges();
-                                       
+                    flag = 1;                   
                 }
             }
 
@@ -70,7 +71,7 @@ namespace SignalRChat
 
                     context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "W" });
                     context.SaveChanges();
-                                       
+                    flag = 1;                   
                 }
             }
 
@@ -81,7 +82,7 @@ namespace SignalRChat
                      
                         context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "D" });
                         context.SaveChanges();
-             
+                        flag = 1;
                     
                 }
             }
@@ -119,11 +120,13 @@ namespace SignalRChat
 
             };
 
-            if(color=="white")
-            GamesOnline[gameName].startClock("black");
-            if (color == "black")
-            GamesOnline[gameName].startClock("white");
-
+            if (flag == 0)
+            {
+                if (color == "white")
+                    GamesOnline[gameName].startClock("black");
+                if (color == "black")
+                    GamesOnline[gameName].startClock("white");
+            }
 
 
 

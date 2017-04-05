@@ -14,15 +14,49 @@ namespace SampleChat.Models
         public ChatDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            
            Database.SetInitializer<ChatDbContext>(new DropCreateDatabaseIfModelChanges<ChatDbContext>());
         }
+
+
 
         public virtual IDbSet<Messages>messages{get;set;}
 
         public virtual IDbSet<Results> results { get; set; }
+
+        public virtual IDbSet<Ratings> ratings { get; set; }
+
+        public virtual IDbSet<Country> Countries { get; set; }
+
+        public virtual IDbSet<Move> Moves { get; set; }
+
+        public virtual IDbSet<Games> Games { get; set; }
+
+        public virtual IDbSet<GamePlayer> GamesPlayers { get; set; }
+
+        public virtual IDbSet<ChatMessages> ChatMessages { get; set; }
+
+
+
         public static ChatDbContext Create()
         {
             return new ChatDbContext();
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+
+
+           
+
+           
+
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.SenderMessage)
+                .WithRequired(x => x.Sender);
+
+
+            base.OnModelCreating(modelBuilder);
+        }
+        
     }
 }

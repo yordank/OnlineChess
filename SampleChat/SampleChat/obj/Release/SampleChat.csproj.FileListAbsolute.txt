@@ -14,8 +14,6 @@ C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\roslyn\
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\SampleChat.dll.config
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\SampleChat.dll
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\bin\SampleChat.pdb
-C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.Migrations.initial.resources
-C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.csproj.GenerateResource.Cache
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.dll
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.pdb
 C:\Users\ADMIN\Desktop\ChessProject\SimpleChat\SampleChat\SampleChat\obj\Release\SampleChat.csprojResolveAssemblyReference.cache
