@@ -15,6 +15,9 @@ namespace SampleChat.Models
 
         public ICollection<Move> Moves { get; set; }
 
-        public ICollection<GamePlayer> GamesPlayers { get; set; }
+        public ApplicationUser WhitePlayer{ get; set; }
+
+        public ApplicationUser BlackPlayer { get; set; }
+
     }
 }

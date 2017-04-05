@@ -32,8 +32,6 @@ namespace SampleChat.Models
 
         public virtual IDbSet<Games> Games { get; set; }
 
-        public virtual IDbSet<GamePlayer> GamesPlayers { get; set; }
-
         public virtual IDbSet<ChatMessages> ChatMessages { get; set; }
 
 
@@ -46,8 +44,10 @@ namespace SampleChat.Models
         {
 
 
-           
 
+            modelBuilder.Entity<ApplicationUser>()
+                .HasMany(x => x.GamesWithWhiteColor)
+                .WithRequired(x => x.WhitePlayer);
            
 
             modelBuilder.Entity<ApplicationUser>()

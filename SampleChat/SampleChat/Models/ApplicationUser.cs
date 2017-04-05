@@ -13,6 +13,8 @@ namespace SampleChat.Models
     {
         public Country Country { get; set; }
 
+        public decimal CurrentRating { get; set; }
+
         public virtual ICollection<Ratings> Ratings { get; set; }
 
       
@@ -20,7 +22,10 @@ namespace SampleChat.Models
 
         public virtual  ICollection<ChatMessages> ReceiverMessage { get; set; }
 
-        public virtual ICollection<GamePlayer> GamesPlayers { get; set; }
+        public ICollection<Games> GamesWithBlackColor { get; set; }
+
+        public ICollection<Games> GamesWithWhiteColor { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType

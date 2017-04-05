@@ -271,7 +271,6 @@
     <Compile Include="Models\ChatDbContext.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Games.cs" />
-    <Compile Include="Models\GamePlayer.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ChatMessages.cs" />
     <Compile Include="Models\Messages.cs" />
