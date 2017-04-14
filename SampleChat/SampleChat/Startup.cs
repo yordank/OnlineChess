@@ -1,6 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
-using SampleChat.Migrations;
+ 
 using SampleChat.Models;
 using System.Data.Entity;
 
@@ -11,7 +11,7 @@ namespace SampleChat
     {
         public void Configuration(IAppBuilder app)
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<ChatDbContext, Configuration>());
+          //  Database.SetInitializer(new MigrateDatabaseToLatestVersion<ChDbContext, Configuration>());
             ConfigureAuth(app);
             app.MapSignalR();
             

@@ -42,7 +42,7 @@ namespace SignalRChat
 
             string sender = Context.User.Identity.Name;
 
-            using (var context = new ChatDbContext())
+            using (var context = new ChessDbContext())
             {
 
                 context.messages.Add(new Messages(moveString));
@@ -55,7 +55,7 @@ namespace SignalRChat
 
             if (status == "Game over, White is in checkmate.")
             {
-                using (var context = new ChatDbContext())
+                using (var context = new ChessDbContext())
                 {
                     Results res = new Results() { WhiteUserName = white, BlackUserName = black, Result = "B" };
                     context.results.Add(res);
@@ -66,7 +66,7 @@ namespace SignalRChat
 
             if (status == "Game over, Black is in checkmate.")
             {
-                using (var context = new ChatDbContext())
+                using (var context = new ChessDbContext())
                 {
 
                     context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "W" });
@@ -77,7 +77,7 @@ namespace SignalRChat
 
             if (status == "Game over, drawn position.")
             {
-                using (var context = new ChatDbContext())
+                using (var context = new ChessDbContext())
                 {
                      
                         context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "D" });
@@ -180,7 +180,7 @@ namespace SignalRChat
 
           
 
-            int a = 5;
+           // int a = 5;
 
             Seekall();
 

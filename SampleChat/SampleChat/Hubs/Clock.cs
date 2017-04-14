@@ -68,7 +68,7 @@ namespace SampleChat.Hubs
 
             this.stop();
 
-            using (var context = new ChatDbContext())
+            using (var context = new ChessDbContext())
             {
                 if (this.Color == "white")
                 {

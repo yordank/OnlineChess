@@ -92,9 +92,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SampleChat\SampleChat.csproj">
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{37841306-0f13-485c-914f-0165ef1d7eb5}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SampleChat\Chess.csproj">
       <Project>{ADF50F84-A19F-4045-85F6-7BFE8E14AD15}</Project>
-      <Name>SampleChat</Name>
+      <Name>Chess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

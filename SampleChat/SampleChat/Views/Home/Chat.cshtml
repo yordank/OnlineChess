@@ -94,20 +94,39 @@ function stopTime(user)
        
 
 
-        <div class="col-md-6 cols-xs-12 ">
+        <div class="col-md-6 col-xs-12 ">
       
-            <div class="row" id="Opponent" style="text-align: center; font-size: 30px;">
+            <div class="row" id="Opponent" style="text-align: center; font-size: 5vw;">
             
-                 <p id="OpponentClock"></p> 
+                <div class="col-md-6 col-xs-6"></div>
+                
+                <div class="col-md-4 col-xs-4">
+                    <p id="OpponentClock">@Math.Floor(decimal.Parse(ViewBag.clockSeconds)/60)
+                    :00
+                    </p>
+                </div>
+                
+                <div class="col-md-2 col-xs-2"></div>
+
+                 
                 </div>
             
             <div class="row" >
-                <div id="board" style="width: 100%"></div>
+                <div id="board" style="width: 90%"></div>
              </div>
 
-            <div class="row" id="Me" style="text-align: center; font-size: 30px;">
+            <div class="row" id="Me" style="text-align: center; font-size: 5vw;">
            
-                <p id="MyClock"></p> 
+                <div class="col-md-6 col-xs-6"></div>
+                
+                <div class="col-md-4 col-xs-4">
+                    <p id="MyClock">@Math.Floor(decimal.Parse(ViewBag.clockSeconds)/60)
+                    :00
+                    </p>
+                </div>
+                
+                <div class="col-md-2 col-xs-2"></div>
+             
             </div>
 
             <div class="row">

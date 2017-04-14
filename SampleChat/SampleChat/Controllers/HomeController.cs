@@ -32,7 +32,7 @@ namespace SampleChat.Controllers
         public ActionResult ListGames()
         {
 
-            using (var context=new ChatDbContext())
+            using (var context=new ChessDbContext())
             {
                 List<Results> results = context.results.OrderByDescending(x=>x.Id).ToList();
 

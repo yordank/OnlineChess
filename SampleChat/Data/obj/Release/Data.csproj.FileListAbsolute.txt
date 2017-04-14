@@ -1,0 +1,16 @@
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Data.dll.config
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Data.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Data.pdb
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\EntityFramework.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Microsoft.AspNet.Identity.Core.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Microsoft.AspNet.Identity.EntityFramework.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Models.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Models.pdb
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\EntityFramework.xml
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Microsoft.AspNet.Identity.Core.xml
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\bin\Release\Microsoft.AspNet.Identity.EntityFramework.xml
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\obj\Release\Data.csprojResolveAssemblyReference.cache
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\obj\Release\Data.dll
+C:\Users\ADMIN\Desktop\ChessProject\OnlineChess\SampleChat\Data\obj\Release\Data.pdb

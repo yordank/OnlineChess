@@ -27,7 +27,7 @@ namespace ChessWebAppTests
             var controller = new HomeController();
             var result = controller.ListGames() as ViewResult;
 
-            var context = new ChatDbContext();
+            var context = new ChessDbContext();
 
             var res = (List<Results>)result.Model;
 
