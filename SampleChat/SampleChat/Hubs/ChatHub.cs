@@ -68,7 +68,7 @@ namespace SignalRChat
             {
                 using (var context = new ChessDbContext())
                 {
-
+                     
                     context.results.Add(new Results() { WhiteUserName = white, BlackUserName = black, Result = "W" });
                     context.SaveChanges();
                     flag = 1;                   
@@ -189,20 +189,23 @@ namespace SignalRChat
 
         public void Seekall()
         {
-
-            var Users = usersWhoSeekOpponent.Select(x => new { Username = x.userId, Time = x.Time });
-
-            var responceMessage = new
+            using (var context = new ChessDbContext())
             {
-                ServiceName = "AllUsersWhoSeekOpponet",
-                Data = Users
-            };
+
+                var Users = usersWhoSeekOpponent.Select(x => new { Username = x.userId, Time = x.Time, Rating = context.Users.Where(y => y.UserName == x.userId).FirstOrDefault().CurrentRating });
+
+                var responceMessage = new
+                {
+                    ServiceName = "AllUsersWhoSeekOpponet",
+                    Data = Users
+                };
 
 
-            var jsonUsers = JsonConvert.SerializeObject(responceMessage);
 
-            Clients.All.ResponceAllOpponents(jsonUsers);
+                var jsonUsers = JsonConvert.SerializeObject(responceMessage);
 
+                Clients.All.ResponceAllOpponents(jsonUsers);
+            }
 
         }
 

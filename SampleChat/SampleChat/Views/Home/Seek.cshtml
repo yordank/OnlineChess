@@ -74,7 +74,7 @@
 
                      //   $('#discussion').append(newLiItem);
 
-                        $('#seekPlayersTable').append('<tr><td>' + myObj.Data[i].Username.toString() + '</td><td>no Rating</td><td>' + myObj.Data[i].Time.toString() + '</td><td>'+link+'</td></tr>');
+                        $('#seekPlayersTable').append('<tr><td>' + myObj.Data[i].Username.toString() + '</td><td>' + myObj.Data[i].Rating.toString() + '</td><td>' + myObj.Data[i].Time.toString() + '</td><td>' + link + '</td></tr>');
 
                         $('#link' + i).click(function () {
                             if ($('#displayname').val() != '')
