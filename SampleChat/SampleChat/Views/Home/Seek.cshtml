@@ -2,11 +2,8 @@
     ViewBag.Title = "Chat";
 }
 <h2>Chess</h2>
-Register a new User or LogIn,after that a button with caption "SEEK OPPONENT"should to appear ,Seek for a opponent(just click the seek button),
-after that open new browser, register a new user or logIn and you would see Invitation from the another user ,
- Click the link and you should start a multiplayer chess game
-@if (Request.IsAuthenticated)
-{
+ 
+ 
 <div class="container">
    
     <input type="button" id="sendmessage" class="btn btn-warning" value="SEEK OPPONENT" />
@@ -20,12 +17,23 @@ after that open new browser, register a new user or logIn and you would see Invi
     </select>
     <input type="hidden" id="displayname" />
 
+    <table id="seekPlayersTable"  class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Player Name</th>
+                <th> Rating</th>
+                <th>Tiime Control</th>
+                <th>Play</th>
+            </tr>
+        </thead>
+    </table>
+
     <ul id="discussion">
          
 
     </ul>
 </div>
-}
+ 
 
 @section scripts {
     <!--Script references. -->
@@ -49,6 +57,8 @@ after that open new browser, register a new user or logIn and you would see Invi
                 // Add the message to the page.
                 $('#discussion').empty();
 
+                $('#seekPlayersTable tbody').empty();
+
                 var myObj = JSON.parse(input);
 
                  
@@ -58,17 +68,30 @@ after that open new browser, register a new user or logIn and you would see Invi
                     if (myObj.Data[i].Username.toString() != $('#displayname').val()) {
 
                         let newLiItem = '<li id="link' + i + '"><a href="#" >Play against ' + myObj.Data[i].Username.toString() + ' ' + myObj.Data[i].Time.toString() + 'minutes</a></li>';
-                        $('#discussion').append(newLiItem);
 
-                        $('#link'+i).click(function () {
-                            chat.server.startgame(myObj.Data[i].Username, $('#displayname').val(), myObj.Data[i].Time);
+                        let link = '<a  id="link' + i + '" href="#">Play</a>';
+
+
+                     //   $('#discussion').append(newLiItem);
+
+                        $('#seekPlayersTable').append('<tr><td>' + myObj.Data[i].Username.toString() + '</td><td>no Rating</td><td>' + myObj.Data[i].Time.toString() + '</td><td>'+link+'</td></tr>');
+
+                        $('#link' + i).click(function () {
+                            if ($('#displayname').val() != '')
+                                chat.server.startgame(myObj.Data[i].Username, $('#displayname').val(), myObj.Data[i].Time);
+                            else
+                                window.location.href = '/Account/Login';
                         });
 
                     }
                     else
                     {
                         let newLiItem = '<li>' + '@Html.ActionLink("Play against username", null,null,null,new { onclick = "alert('Cannot play against yourself');", @Href = "#" })'.replace("username", myObj.Data[i].Username.toString()) + '</li>';
-                        $('#discussion').append(newLiItem);
+
+                    //    $('#discussion').append(newLiItem);
+
+                        $('#seekPlayersTable').append('<tr class="danger"><td>' + myObj.Data[i].Username.toString() + '</td><td>no Rating</td><td>' + myObj.Data[i].Time.toString() + '</td><td></td></tr>');
+
                     }
 
                    
@@ -90,11 +113,14 @@ after that open new browser, register a new user or logIn and you would see Invi
             $.connection.hub.start().done(function () {
                 $('#sendmessage').click(function () {
 
-                     
-                    // Call the Send method on the hub.
-                    chat.server.seek($('#displayname').val(), $('#timeSelector').val());
-                    // Clear text box and reset focus for next comment.
-
+                    if ($('#displayname').val() != '') {
+                        // Call the Send method on the hub.
+                        chat.server.seek($('#displayname').val(), $('#timeSelector').val());
+                        // Clear text box and reset focus for next comment.
+                    }
+                    else {
+                        window.location.href = '/Account/Login';
+                    }
                 });
 
                
