@@ -8,13 +8,15 @@ after that open new browser, register a new user or logIn and you would see Invi
 @if (Request.IsAuthenticated)
 {
 <div class="container">
-     
-    <input type="button" id="sendmessage" value="SEEK OPPONENT" />
-    <select id="timeSelector">
+   
+    <input type="button" id="sendmessage" class="btn btn-warning" value="SEEK OPPONENT" />
+    <select id="timeSelector" class="btn-success" data-style="btn-warning">
         <option value="1">1miunute</option>
         <option value="2">2miunute</option>
         <option value="3">3miunute</option>
-        <option value="5">5miunute</option>
+        <option value="5" selected>5miunute</option>
+        <option value="10">10miunute</option>
+        <option value="30">30miunute</option>
     </select>
     <input type="hidden" id="displayname" />
 
