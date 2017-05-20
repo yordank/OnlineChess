@@ -1,4 +1,4 @@
-online chess multiplayer
+online chess multiplayer,including full Javascript chess board validation!!!
 <br>
 <img src="chess.gif" alt="Chess gif" >
 <br>
